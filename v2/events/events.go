@@ -68,6 +68,7 @@ type IGroupMsg interface {
 	GetMsgSeq() int64
 	GetMsgRandom() int64
 	IsFromBot() bool
+	GetRedBag() RedBag
 }
 type ITextMsg interface {
 	GetTextContent() string
@@ -114,6 +115,22 @@ type GroupInfo struct {
 type UserInfo struct {
 	Nick string `json:"Nick"`
 	Uin  int64  `json:"Uin"`
+	Uid  string `json:"Uid"`
+}
+
+type RedBag struct {
+	Wishing     string `json:"Wishing"`
+	Des         string `json:"Des"`
+	RedType     int    `json:"RedType"`
+	Listid      string `json:"Listid"`
+	Authkey     string `json:"Authkey"`
+	Channel     int    `json:"Channel"`
+	StingIndex  string `json:"StingIndex"`
+	TransferMsg string `json:"TransferMsg"`
+	Token172    string `json:"Token_17_2"`
+	Token173    string `json:"Token_17_3"`
+	FromUin     int    `json:"FromUin"`
+	FromType    int    `json:"FromType"`
 }
 
 //easyjson:json
@@ -151,6 +168,7 @@ type EventStruct struct {
 				AtUinLists []UserInfo  `json:"AtUinLists"`
 				Video      interface{} `json:"Video"`
 				Voice      interface{} `json:"Voice"`
+				RedBag     RedBag      `json:"RedBag"`
 			} `json:"MsgBody,omitempty"`
 			Event *struct {
 				Invitee string `json:"Invitee"`
@@ -182,7 +200,7 @@ func (e *EventStruct) GetGroupJoinEvent() (Invitee string, Invitor string, tips 
 }
 
 func (e *EventStruct) GetGroupUId() (uin int64) {
-	return e.CurrentPacket.EventData.MsgHead.ToUin
+	return e.CurrentPacket.EventData.MsgHead.FromUin
 }
 
 func (e *EventStruct) GetAtList() (list []int64) {
@@ -208,6 +226,10 @@ func (e *EventStruct) GetMsgRandom() int64 {
 
 func (e *EventStruct) IsFromBot() bool {
 	return e.CurrentPacket.EventData.MsgHead.SenderUin == e.CurrentQQ
+}
+
+func (e EventStruct) GetRedBag() RedBag {
+	return e.CurrentPacket.EventData.MsgBody.RedBag
 }
 
 func (e *EventStruct) AtBot() (at bool) {

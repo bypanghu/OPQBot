@@ -122,6 +122,7 @@ func easyjson692db02bDecode(in *jlexer.Lexer, out *struct {
 			AtUinLists []UserInfo  `json:"AtUinLists"`
 			Video      interface{} `json:"Video"`
 			Voice      interface{} `json:"Voice"`
+			RedBag     RedBag      `json:"RedBag"`
 		} `json:"MsgBody,omitempty"`
 		Event *struct {
 			Invitee string `json:"Invitee"`
@@ -195,6 +196,7 @@ func easyjson692db02bEncode(out *jwriter.Writer, in struct {
 			AtUinLists []UserInfo  `json:"AtUinLists"`
 			Video      interface{} `json:"Video"`
 			Voice      interface{} `json:"Voice"`
+			RedBag     RedBag      `json:"RedBag"`
 		} `json:"MsgBody,omitempty"`
 		Event *struct {
 			Invitee string `json:"Invitee"`
@@ -250,6 +252,7 @@ func easyjson692db02bDecode1(in *jlexer.Lexer, out *struct {
 		AtUinLists []UserInfo  `json:"AtUinLists"`
 		Video      interface{} `json:"Video"`
 		Voice      interface{} `json:"Voice"`
+		RedBag     RedBag      `json:"RedBag"`
 	} `json:"MsgBody,omitempty"`
 	Event *struct {
 		Invitee string `json:"Invitee"`
@@ -347,6 +350,7 @@ func easyjson692db02bDecode1(in *jlexer.Lexer, out *struct {
 						AtUinLists []UserInfo  `json:"AtUinLists"`
 						Video      interface{} `json:"Video"`
 						Voice      interface{} `json:"Voice"`
+						RedBag     RedBag      `json:"RedBag"`
 					})
 				}
 				easyjson692db02bDecode3(in, out.MsgBody)
@@ -406,6 +410,7 @@ func easyjson692db02bEncode1(out *jwriter.Writer, in struct {
 		AtUinLists []UserInfo  `json:"AtUinLists"`
 		Video      interface{} `json:"Video"`
 		Voice      interface{} `json:"Voice"`
+		RedBag     RedBag      `json:"RedBag"`
 	} `json:"MsgBody,omitempty"`
 	Event *struct {
 		Invitee string `json:"Invitee"`
@@ -550,6 +555,7 @@ func easyjson692db02bDecode3(in *jlexer.Lexer, out *struct {
 	AtUinLists []UserInfo  `json:"AtUinLists"`
 	Video      interface{} `json:"Video"`
 	Voice      interface{} `json:"Voice"`
+	RedBag     RedBag      `json:"RedBag"`
 }) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
@@ -619,7 +625,7 @@ func easyjson692db02bDecode3(in *jlexer.Lexer, out *struct {
 				in.Delim('[')
 				if out.AtUinLists == nil {
 					if !in.IsDelim(']') {
-						out.AtUinLists = make([]UserInfo, 0, 2)
+						out.AtUinLists = make([]UserInfo, 0, 1)
 					} else {
 						out.AtUinLists = []UserInfo{}
 					}
@@ -650,6 +656,8 @@ func easyjson692db02bDecode3(in *jlexer.Lexer, out *struct {
 			} else {
 				out.Voice = in.Interface()
 			}
+		case "RedBag":
+			easyjson692db02bDecodeGithubComOpqOscOPQBotV2Events2(in, &out.RedBag)
 		default:
 			in.SkipRecursive()
 		}
@@ -672,6 +680,7 @@ func easyjson692db02bEncode3(out *jwriter.Writer, in struct {
 	AtUinLists []UserInfo  `json:"AtUinLists"`
 	Video      interface{} `json:"Video"`
 	Voice      interface{} `json:"Voice"`
+	RedBag     RedBag      `json:"RedBag"`
 }) {
 	out.RawByte('{')
 	first := true
@@ -740,6 +749,130 @@ func easyjson692db02bEncode3(out *jwriter.Writer, in struct {
 			out.Raw(json.Marshal(in.Voice))
 		}
 	}
+	{
+		const prefix string = ",\"RedBag\":"
+		out.RawString(prefix)
+		easyjson692db02bEncodeGithubComOpqOscOPQBotV2Events2(out, in.RedBag)
+	}
+	out.RawByte('}')
+}
+func easyjson692db02bDecodeGithubComOpqOscOPQBotV2Events2(in *jlexer.Lexer, out *RedBag) {
+	isTopLevel := in.IsStart()
+	if in.IsNull() {
+		if isTopLevel {
+			in.Consumed()
+		}
+		in.Skip()
+		return
+	}
+	in.Delim('{')
+	for !in.IsDelim('}') {
+		key := in.UnsafeFieldName(false)
+		in.WantColon()
+		if in.IsNull() {
+			in.Skip()
+			in.WantComma()
+			continue
+		}
+		switch key {
+		case "Wishing":
+			out.Wishing = string(in.String())
+		case "Des":
+			out.Des = string(in.String())
+		case "RedType":
+			out.RedType = int(in.Int())
+		case "Listid":
+			out.Listid = string(in.String())
+		case "Authkey":
+			out.Authkey = string(in.String())
+		case "Channel":
+			out.Channel = int(in.Int())
+		case "StingIndex":
+			out.StingIndex = string(in.String())
+		case "TransferMsg":
+			out.TransferMsg = string(in.String())
+		case "Token_17_2":
+			out.Token172 = string(in.String())
+		case "Token_17_3":
+			out.Token173 = string(in.String())
+		case "FromUin":
+			out.FromUin = int(in.Int())
+		case "FromType":
+			out.FromType = int(in.Int())
+		default:
+			in.SkipRecursive()
+		}
+		in.WantComma()
+	}
+	in.Delim('}')
+	if isTopLevel {
+		in.Consumed()
+	}
+}
+func easyjson692db02bEncodeGithubComOpqOscOPQBotV2Events2(out *jwriter.Writer, in RedBag) {
+	out.RawByte('{')
+	first := true
+	_ = first
+	{
+		const prefix string = ",\"Wishing\":"
+		out.RawString(prefix[1:])
+		out.String(string(in.Wishing))
+	}
+	{
+		const prefix string = ",\"Des\":"
+		out.RawString(prefix)
+		out.String(string(in.Des))
+	}
+	{
+		const prefix string = ",\"RedType\":"
+		out.RawString(prefix)
+		out.Int(int(in.RedType))
+	}
+	{
+		const prefix string = ",\"Listid\":"
+		out.RawString(prefix)
+		out.String(string(in.Listid))
+	}
+	{
+		const prefix string = ",\"Authkey\":"
+		out.RawString(prefix)
+		out.String(string(in.Authkey))
+	}
+	{
+		const prefix string = ",\"Channel\":"
+		out.RawString(prefix)
+		out.Int(int(in.Channel))
+	}
+	{
+		const prefix string = ",\"StingIndex\":"
+		out.RawString(prefix)
+		out.String(string(in.StingIndex))
+	}
+	{
+		const prefix string = ",\"TransferMsg\":"
+		out.RawString(prefix)
+		out.String(string(in.TransferMsg))
+	}
+	{
+		const prefix string = ",\"Token_17_2\":"
+		out.RawString(prefix)
+		out.String(string(in.Token172))
+	}
+	{
+		const prefix string = ",\"Token_17_3\":"
+		out.RawString(prefix)
+		out.String(string(in.Token173))
+	}
+	{
+		const prefix string = ",\"FromUin\":"
+		out.RawString(prefix)
+		out.Int(int(in.FromUin))
+	}
+	{
+		const prefix string = ",\"FromType\":"
+		out.RawString(prefix)
+		out.Int(int(in.FromType))
+	}
 	out.RawByte('}')
 }
 func easyjson692db02bDecodeGithubComOpqOscOPQBotV2Events1(in *jlexer.Lexer, out *UserInfo) {
@@ -765,6 +898,8 @@ func easyjson692db02bDecodeGithubComOpqOscOPQBotV2Events1(in *jlexer.Lexer, out 
 			out.Nick = string(in.String())
 		case "Uin":
 			out.Uin = int64(in.Int64())
+		case "Uid":
+			out.Uid = string(in.String())
 		default:
 			in.SkipRecursive()
 		}
@@ -788,6 +923,11 @@ func easyjson692db02bEncodeGithubComOpqOscOPQBotV2Events1(out *jwriter.Writer, i
 		const prefix string = ",\"Uin\":"
 		out.RawString(prefix)
 		out.Int64(int64(in.Uin))
+	}
+	{
+		const prefix string = ",\"Uid\":"
+		out.RawString(prefix)
+		out.String(string(in.Uid))
 	}
 	out.RawByte('}')
 }
@@ -920,7 +1060,7 @@ func easyjson692db02bDecode2(in *jlexer.Lexer, out *struct {
 		case "MsgUid":
 			out.MsgUid = int64(in.Int64())
 		case "GroupInfo":
-			easyjson692db02bDecodeGithubComOpqOscOPQBotV2Events2(in, &out.GroupInfo)
+			easyjson692db02bDecodeGithubComOpqOscOPQBotV2Events3(in, &out.GroupInfo)
 		case "C2CTempMessageHead":
 			if m, ok := out.C2CTempMessageHead.(easyjson.Unmarshaler); ok {
 				m.UnmarshalEasyJSON(in)
@@ -1015,7 +1155,7 @@ func easyjson692db02bEncode2(out *jwriter.Writer, in struct {
 	{
 		const prefix string = ",\"GroupInfo\":"
 		out.RawString(prefix)
-		easyjson692db02bEncodeGithubComOpqOscOPQBotV2Events2(out, in.GroupInfo)
+		easyjson692db02bEncodeGithubComOpqOscOPQBotV2Events3(out, in.GroupInfo)
 	}
 	{
 		const prefix string = ",\"C2CTempMessageHead\":"
@@ -1030,7 +1170,7 @@ func easyjson692db02bEncode2(out *jwriter.Writer, in struct {
 	}
 	out.RawByte('}')
 }
-func easyjson692db02bDecodeGithubComOpqOscOPQBotV2Events2(in *jlexer.Lexer, out *GroupInfo) {
+func easyjson692db02bDecodeGithubComOpqOscOPQBotV2Events3(in *jlexer.Lexer, out *GroupInfo) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -1073,7 +1213,7 @@ func easyjson692db02bDecodeGithubComOpqOscOPQBotV2Events2(in *jlexer.Lexer, out 
 		in.Consumed()
 	}
 }
-func easyjson692db02bEncodeGithubComOpqOscOPQBotV2Events2(out *jwriter.Writer, in GroupInfo) {
+func easyjson692db02bEncodeGithubComOpqOscOPQBotV2Events3(out *jwriter.Writer, in GroupInfo) {
 	out.RawByte('{')
 	first := true
 	_ = first

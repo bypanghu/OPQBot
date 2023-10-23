@@ -23,6 +23,7 @@ type Builder struct {
 	CgiCmd     *string     `json:"CgiCmd,omitempty"`
 	CgiRequest *CgiRequest `json:"CgiRequest,omitempty"`
 }
+
 type CgiRequest struct {
 	LastUin    *int64  `json:"LastUin,omitempty"`
 	OpCode     *int    `json:"OpCode,omitempty"`
@@ -44,6 +45,20 @@ type CgiRequest struct {
 	MsgRandom  *int64  `json:"MsgRandom,omitempty"`
 	BanTime    *int    `json:"BanTime,omitempty"`
 	Nick       *string `json:"Nick,omitempty"`
+	// 红包相关
+	Wishing     string `json:"Wishing"`
+	Des         string `json:"Des"`
+	RedType     int    `json:"RedType"`
+	ListId      string `json:"Listid"`
+	AuthKey     string `json:"Authkey"`
+	Channel     int    `json:"Channel"`
+	StingIndex  string `json:"StingIndex"`
+	TransferMsg string `json:"TransferMsg"`
+	Token172    string `json:"Token_17_2"`
+	Token173    string `json:"Token_17_3"`
+	FromUin     int    `json:"FromUin"`
+	FromType    int    `json:"FromType"`
+
 	AtUinLists []struct {
 		Uin *int64 `json:"Uin,omitempty"`
 	} `json:"AtUinLists,omitempty"`

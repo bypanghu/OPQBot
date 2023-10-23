@@ -1,11 +1,14 @@
 package apiBuilder
 
+import "github.com/opq-osc/OPQBot/v2/events"
+
 type IGroupManager interface {
 	DoApi
 	GetGroupLists() IGroupManager
 	GetGroupMemberLists(uin int64, lastBuffer string) IGroupManager
 	GroupSystemMsgAction(MsgType int, MsgSeq, GroupCode int64) IGroupSystemMsgAction
 	RevokeMsg() IGroupManager
+	GetRedBag() IGroupManager
 	ToGUin(Uin int64) IGroupManager
 	MsgSeq(MsgSeq int64) IGroupManager
 	MsgRandom(MsgRandom int64) IGroupManager
@@ -14,6 +17,7 @@ type IGroupManager interface {
 	ShutTime(ShutTime int) IGroupManager
 	RemoveUser() IGroupManager
 	RenameUserNickName(NickName string) IGroupManager
+	SetRedBagMsg(bag events.RedBag) IGroupManager
 }
 type IGroupSystemMsgAction interface {
 	DoApi
@@ -89,6 +93,27 @@ func (b *Builder) GroupSystemMsgAction(MsgType int, MsgSeq, GroupCode int64) IGr
 func (b *Builder) RevokeMsg() IGroupManager {
 	cmd := "GroupRevokeMsg"
 	b.CgiCmd = &cmd
+	return b
+}
+
+func (b *Builder) GetRedBag() IGroupManager {
+	cmd := "OpenREDBAG"
+	b.CgiCmd = &cmd
+	return b
+}
+
+func (b *Builder) SetRedBagMsg(bag events.RedBag) IGroupManager {
+	b.CgiRequest.Wishing = bag.Wishing
+	b.CgiRequest.Des = bag.Des
+	b.CgiRequest.RedType = 6
+	b.CgiRequest.ListId = bag.Listid
+	b.CgiRequest.AuthKey = bag.Authkey
+	b.CgiRequest.Channel = 1
+	b.CgiRequest.StingIndex = bag.StingIndex
+	b.CgiRequest.Token173 = bag.Token173
+	b.CgiRequest.Token172 = bag.Token172
+	b.CgiRequest.FromType = 1
+	b.CgiRequest.FromUin = bag.FromUin
 	return b
 }
 
