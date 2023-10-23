@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="referrer" content="no-referrer">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/dayjs.js"></script>
+  <title>测试日报</title>
+
+  <style>
+    @font-face {
+      font-family: keli;
+      src: url(assets/subsetFont.ttf);
+    }
+
+    .title {
+      font-family: keli;
+      font-size: 6rem;
+    }
+
+
+    .grid-item-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app" class=" bg-red-200 w-full rounded-lg  p-4 font-sans">
+    <div class=" container bg-white rounded-lg w-full h-full p-2 mx-auto rounded-lg relative">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center">
+          <!-- <img src="head.jpg" class="w-24" /> -->
+          <div class=" font-extrabold text-red-400 title">可莉日报</div>
+        </div>
+        <div class="bg-red-100 text-red-300 rounded">
+          <div class="text-center text-5xl py-3" id="week">
+            {{week}}
+          </div>
+          <div class="text-sm bg-red-300 text-white px-2" id="time">
+            {{time}}
+          </div>
+          <div class="text-center py-2" id="solarDate">
+            {{solarDate}}
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 mt-6  gap-4">
+        <div class="grid-item border border-2 border-red-400 rounded">
+          <div
+            class="text-xl font-bold text-red-400 grid-item-title border p-1 border-red-400 shadow shadow-red-400 rounded-lg border-2 -translate-y-6 ml-2 bg-white ">
+            <img src="./assets/haoye.png" alt="" class="w-8" style="display: inline-block;" srcset="">
+            <span class="ml-1">摸鱼日历</span>
+          </div>
+          <div class="p-2 -translate-y-3 ">
+            <div class="flex items-center text-red-400 pb-2" v-for="(item , index) in daysRef">
+              <span class="text-black">距离</span>
+              <span class="w-[4rem] px-1 text-center">{{item.name}}</span>
+              <span class="text-black">还剩</span>
+              <span class="px-1 font-mono">{{item.day}}</span>
+              <span class="text-black">天</span>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item border border-2 border-red-400 rounded">
+          <div
+            class="text-xl font-bold text-red-400 grid-item-title border p-1 border-red-400 shadow shadow-red-400 rounded-lg border-2 -translate-y-6 ml-2 bg-white ">
+            <img src="https://www.bilibili.com/favicon.ico?v=1" alt="" class="h-6" style="display: inline-block;"
+              srcset="">
+            <span class="ml-1">B站热门</span>
+          </div>
+          <div class="p-1 -translate-y-5">
+            <img src="./assets/empty.png" class="w-[20rem]" v-if="bilibiliHotWordList.length === 0" alt="" srcset="">
+            <div class="flex items-center pl-2 pb-2 line-clamp-1"
+            v-else
+              v-for="(item , index) in bilibiliHotWordList">
+              {{item.show_name}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-item border border-2 border-red-400 rounded mt-8">
+        <div
+          class="text-xl font-bold text-red-400 grid-item-title border p-1 border-red-400 shadow shadow-red-400 rounded-lg border-2 -translate-y-6 ml-2 bg-white ">
+          <img src="./assets/haoye.png" alt="" class="w-8" style="display: inline-block;" srcset="">
+          <span class="ml-1">今日番剧</span>
+        </div>
+        <img src="./assets/empty.png" class="w-[20rem] mx-auto" v-if="!domVisible" alt="" srcset="">
+        <div class="p-2 -translate-y-3 grid-cols-5 grid gap-4" id="bFanList" v-else>
+          <div class=" text-red-400 pb-2 flex flex-col items-center"
+            v-for="(item , index) in bilibiliListRef">
+            <img :src="item.cover" class="w-[8rem] h-[10rem] rounded" alt="" srcset="">
+            <div class="text-sm line-clamp-2 text-center mt-1">{{item.title}}</div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="grid-item border border-2 border-red-400 rounded mt-8">
+        <div
+          class="text-xl font-bold text-red-400 grid-item-title border p-1 border-red-400 shadow shadow-red-400 rounded-lg border-2 -translate-y-6 ml-2 bg-white ">
+          <img src="./assets/haoye.png" alt="" class="w-8 " style="display: inline-block;" srcset="">
+          <span class="ml-1">科技咨询</span>
+        </div>
+        <div class="p-2 -translate-y-3 ">
+          <img src="./assets/empty.png" class="w-[20rem] mx-auto"  v-if="teckListRef.length === 0" alt="" srcset="">
+          <div class="flex items-center pb-2 line-clamp-1" id="teckList" v-for="(item , index) in teckListRef"  v-else>
+              <svg
+                      t="1691125984177" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                      p-id="2343" width="12" height="12">
+              <path
+                d="M512 277.333333a234.666667 234.666667 0 1 0 0 469.333334 234.666667 234.666667 0 0 0 0-469.333334z"
+                fill="#000000" fill-opacity=".85" p-id="2344"></path>
+            </svg>
+            {{item.title}}
+          </div>
+        </div>
+      </div>
+      <img src="./assets/keli.gif" class="w-[18rem] float-r " alt="">
+    </div>
+  </div>
+  <script src="./js/vue.js"></script>
+  <script src="./js/solarlunar.js"></script>
+  <script>
+    const { createApp, ref , onMounted , nextTick } = Vue
+    const bilibiliurl = "/bilibiliHotWord"
+    const bilibiliListurl = "/bilibiliFanList"
+    const teckListUrl =  "/getTeckList"
+    const getUntilNextWeenkends = () => {
+      const day = dayjs().day()
+      if (day === 0 || day === 6) {
+        return 0
+      }
+      return 6 - day
+    }
+    const getUntilNextLunarDay = (lunarDay) => {
+      const year = dayjs().year()
+      const currentDay = solarlunar.lunar2solar(year, ...lunarDay)
+
+      const currentDayIns = dayjs(`${currentDay.cYear}-${currentDay.cMonth}-${currentDay.cDay}`)
+      const diff = currentDayIns.diff(dayjs(), 'day')
+      if (diff >= 0) {
+        return diff
+      }
+      const nextDay = solarlunar.lunar2solar(year + 1, ...lunarDay)
+      const nextDayIns = dayjs(`${nextDay.cYear}-${nextDay.cMonth}-${nextDay.cDay}`)
+      return nextDayIns.diff(dayjs(), 'day')
+    }
+    const getUntilNextSolarDay = (solarDay) => {
+      const year = dayjs().year()
+      const solarDayLabel = `${solarDay[0]}-${solarDay[1]}`
+      const currentDayIns = dayjs(`${year}-${solarDayLabel}`)
+      const diff = currentDayIns.diff(dayjs(), 'day')
+      if (diff >= 0) {
+        return diff
+      }
+      const nextDayIns = dayjs(`${year + 1}-${solarDayLabel}`)
+      return nextDayIns.diff(dayjs(), 'day')
+    }
+    const getUntilNextMidAutumn = () => {
+      return getUntilNextLunarDay([8, 15])
+    }
+    const getUntilNextNational = () => {
+      return getUntilNextSolarDay([10, 1])
+    }
+    const getUntilNextNewYear = () => {
+      return getUntilNextSolarDay([1, 1])
+    }
+    const getUntilNextSpring = () => {
+      return getUntilNextLunarDay([1, 1])
+    }
+    const getUntilNextTombSweeping = () => {
+      return getUntilNextLunarDay([2, 5])
+    }
+    const getUntilNextLabor = () => {
+      return getUntilNextSolarDay([5, 1])
+    }
+    const getUntilNextDragonBoat = () => {
+      return getUntilNextLunarDay([5, 5])
+    }
+    const result = {
+      toWeekendsDay: getUntilNextWeenkends(),
+      toMidAutumnDay: getUntilNextMidAutumn(),
+      toNationalDay: getUntilNextNational(),
+      toNewYearDay: getUntilNextNewYear(),
+      toSpringDay: getUntilNextSpring(),
+      toTombSweepingDay: getUntilNextTombSweeping(),
+      toLaborDay: getUntilNextLabor(),
+      toDragonBoatDay: getUntilNextDragonBoat(),
+    }
+    const labelMap = {
+      toWeekendsDay: '周末',
+      toMidAutumnDay: '中秋节',
+      toNationalDay: '国庆节',
+      toNewYearDay: '元旦',
+      toSpringDay: '春节',
+      toTombSweepingDay: '清明节',
+      toLaborDay: '劳动节',
+      toDragonBoatDay: '端午节',
+    }
+
+    const days = []
+
+    // 将JSON对象转换为键值对数组
+    const entries = Object.entries(result);
+
+    // 根据数字进行排序
+    entries.sort((a, b) => a[1] - b[1]);
+
+    // 输出排序结果
+    entries.forEach(([key, value]) => {
+      days.push({
+        name: labelMap[key],
+        day: value
+      })
+    });
+
+  let solar = {}
+    createApp({
+      setup() {
+        const week = ref('')
+        const time = ref('')
+        const solarDate = ref('')
+        const daysRef = ref(days)
+        const teckListRef = ref([])
+        const bilibiliListRef = ref([])
+        const bilibiliHotWordList = ref([])
+        const domVisible = ref(false)
+
+        const _getWeek = () => {
+          week.value = ['日', '一', '二', '三', '四', '五', '六'][dayjs().day()]
+          time.value = dayjs().format('YYYY年MM月DD日')
+          solar = solarlunar.lunar2solar(dayjs().year(), dayjs().month() + 1, dayjs().date());
+          solarDate.value = `${solar.monthCn}${solar.dayCn}`
+        }
+
+        const _queryBilibiliHotWord = () => {
+          fetch(bilibiliurl).then(res => res.json()).then(res => {
+            bilibiliHotWordList.value = res.list.slice(0,10)
+          })
+        }
+
+        const _queryTeckList  =() =>{
+          fetch(teckListUrl).then(res => res.json()).then(res => {
+            teckListRef.value = res.slice(0,10)
+          })
+        }
+
+        const _queryFanList = () =>{
+          fetch(bilibiliListurl).then(res => res.json()).then(res => {
+            bilibiliListRef.value = res.result.list.slice(0,10)
+          })
+        }
+        (function () {
+          _getWeek()
+          _queryBilibiliHotWord()
+          _queryTeckList()
+          _queryFanList()
+        })()
+
+        onMounted(async ()=>{
+          await nextTick(() =>{
+            console.log("页面加载完成")
+            domVisible.value = true
+          })
+        })
+
+        return {
+          time,
+          week,
+          solarDate,
+          bilibiliHotWordList,
+          daysRef,
+          teckListRef,
+          bilibiliListRef,
+          domVisible
+        }
+
+      },
+    }).mount('#app')
+  </script>
+
+</body>
+
+</html>

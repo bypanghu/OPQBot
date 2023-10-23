@@ -158,7 +158,7 @@ func main() {
 						if Code == 0 {
 							log.Println("发送成功")
 						} else {
-							log.Println("发送失败 错误代码", Code, Info)
+							log.Println("发送失败 错误代码 1231", Code, Info)
 						}
 					},
 				})

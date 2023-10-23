@@ -13,7 +13,7 @@ import (
 func main() {
 	log.SetLevel(log.DebugLevel)
 	log.SetReportCaller(true)
-	core, err := OPQBot.NewCore(apiUrl, OPQBot.WithMaxRetryCount(5), OPQBot.WithAutoSignToken(123123, 123123))
+	core, err := OPQBot.NewCore(apiUrl, OPQBot.WithMaxRetryCount(5), OPQBot.WithAutoSignToken(877228648, 856337734))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,7 +25,7 @@ func main() {
 			if groupMsg.AtBot() {
 				text := groupMsg.ExcludeAtInfo().ParseTextMsg().GetTextContent()
 				if text == "test" {
-					apiBuilder.New(apiUrl, event.GetCurrentQQ()).SendMsg().GroupMsg().ToUin(groupMsg.GetGroupUin()).TextMsg("test").DoWithCallBack(ctx, func(iApiBuilder *apiBuilder.Response, err error) {
+					err := apiBuilder.New(apiUrl, event.GetCurrentQQ()).SendMsg().GroupMsg().ToUin(groupMsg.GetGroupUin()).TextMsg("test").DoWithCallBack(ctx, func(iApiBuilder *apiBuilder.Response, err error) {
 						response, err := iApiBuilder.GetGroupMessageResponse()
 						if err != nil {
 							return
@@ -33,10 +33,12 @@ func main() {
 						time.Sleep(time.Second * 1)
 						apiBuilder.New(apiUrl, event.GetCurrentQQ()).GroupManager().RevokeMsg().ToGUin(groupMsg.GetGroupUin()).MsgSeq(response.MsgSeq).MsgRandom(response.MsgTime).Do(ctx)
 					})
+					if err != nil {
+						return
+					}
 				}
 			}
 		}
-
 	})
 	err = core.ListenAndWait(context.Background())
 	if err != nil {
